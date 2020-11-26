@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Modern+Antiqua&family=Roboto&family=Roboto+Mono&display=swap");
+
+html {
+  @apply h-full w-full font-sans;
+}
+
+body {
+  @apply h-full w-full;
+}
+
+#__next {
+  @apply h-full w-full;
+}
+
+.fancy-link {
+  @apply relative text-blue-500 visited:text-purple-700;
+}
+.fancy-link::before {
+  @apply absolute w-full mt-px bottom-0 left-0 bg-blue-500 invisible transform scale-x-0 transition-all duration-200 ease-in-out;
+  content: "";
+  height: 2px;
+}
+.fancy-link:visited::before {
+  @apply bg-purple-700;
+}
+.fancy-link:hover::before {
+  @apply visible scale-x-100;
+}

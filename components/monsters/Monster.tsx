@@ -62,18 +62,14 @@ export default function Monster(monster: IMonster) {
               ​<span className="font-bold">Proficiencies: </span>
               <span>
                 {monster.proficiencies.map(({ value, proficiency: { name } }) => (
-                  <span className="px-1 py-px bg-yellow-500 shadow-sm rounded mx-px my-1">
-                    {`${name.replace(/Skill: /, " ")} ${value > 0 ? "+" : ""}${value}`}
-                  </span>
+                  <Pill>{`${name.replace(/Skill: /, " ")} ${value > 0 ? "+" : ""}${value}`}</Pill>
                 ))}
               </span>
             </p>
             <p className="m-1">
               <span className="font-bold">Senses: </span>
               {Object.entries(monster.senses || {}).map(([type, value]) => (
-                <span className="capitalize px-1 py-px bg-yellow-500 shadow-sm rounded mx-px my-1">
-                  {`${type.replace(/_/, " ")} ${value}`}
-                </span>
+                <Pill>{`${type.replace(/_/, " ")} ${value}`}</Pill>
               ))}
             </p>
           </Section>
@@ -114,5 +110,12 @@ function Section({ className, title, children }: ISection) {
       <h3 className="text-xl font-serif m-1">{title}</h3>
       {children}
     </section>
+  );
+}
+function Pill({ children }) {
+  return (
+    <span className="inline-block capitalize px-1 py-px bg-yellow-500 shadow-sm rounded m-2px">
+      {children}
+    </span>
   );
 }

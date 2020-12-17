@@ -9,6 +9,11 @@ module.exports = {
         '"Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
       serif: '"Modern Antiqua", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif',
     },
+    extend: {
+      margin: {
+        "2px": "2px",
+      },
+    },
   },
   variants: {
     extend: {

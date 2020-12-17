@@ -15,7 +15,10 @@ export async function fetchIndex() {
 export async function pickTwo(monsters: APIResource[]): Promise<[IMonster, IMonster]> {
   const [one, two] =
     NODE_ENV === "development"
-      ? [monsters[121].index, monsters.find((m) => m.name === "Doppelganger").index]
+      ? [
+          monsters.find((m) => m.name === "Young Green Dragon").index,
+          monsters.find((m) => m.name === "Archmage").index,
+        ]
       : [
           monsters[Math.floor(Math.random() * monsters.length)].index,
           monsters[Math.floor(Math.random() * monsters.length)].index,

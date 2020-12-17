@@ -1,8 +1,7 @@
 module.exports = {
-  purge: ["./pages/**/*.tsx", "./components/**/*.tsx"],
-  darkMode: false, // or 'media' or 'class'
+  purge: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
+  darkMode: "media", // or 'media' or 'class'
   theme: {
-    extend: {},
     fontFamily: {
       sans:
         'Roboto, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
@@ -14,6 +13,7 @@ module.exports = {
   variants: {
     extend: {
       textColor: ["visited"],
+      borderWidth: ["last"],
     },
   },
   plugins: [],

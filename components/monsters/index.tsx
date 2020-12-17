@@ -18,7 +18,7 @@ export default function Monsters({ monsters }: IMonstersProps) {
   }, []);
 
   return (
-    <div className="flex flex-row flex-wrap max-w-screen-md md:mx-auto">
+    <div className="grid grid-cols-1 md:grid-cols-2 grid- gap-4 max-w-screen-md md:mx-auto">
       <Monster {...left} />
       <Monster {...right} />
     </div>

@@ -1,6 +1,7 @@
 import log from "./log";
 
 const api = "https://www.dnd5eapi.co/api";
+const { NODE_ENV } = process.env;
 
 export async function fetchIndex() {
   const response = await fetch(`${api}/monsters`);
@@ -11,11 +12,14 @@ export async function fetchIndex() {
   return results;
 }
 
-export async function pickTwo(monsters: IMonsterIndex[]): Promise<[IMonster, IMonster]> {
-  const [one, two] = [
-    monsters[Math.floor(Math.random() * monsters.length)].index,
-    monsters[Math.floor(Math.random() * monsters.length)].index,
-  ];
+export async function pickTwo(monsters: APIResource[]): Promise<[IMonster, IMonster]> {
+  const [one, two] =
+    NODE_ENV === "development"
+      ? [monsters[121].index, monsters.find((m) => m.name === "Doppelganger").index]
+      : [
+          monsters[Math.floor(Math.random() * monsters.length)].index,
+          monsters[Math.floor(Math.random() * monsters.length)].index,
+        ];
 
   return [
     await (await fetch(`${api}/monsters/${one}`)).json(),

@@ -30,3 +30,11 @@ body {
 .fancy-link:hover::before {
   @apply visible scale-x-100;
 }
+
+/**
+ * Gross Fixes
+ **/
+/* 0-width space is needed to ensure capitalize css functions properly in firefox */
+.capitalize::before {
+  content: "\200b";
+}

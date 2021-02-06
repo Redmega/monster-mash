@@ -22,6 +22,13 @@ interface IMonster extends APIResource {
     value: number;
     proficiency: APIResource;
   }[];
+  damage_immunities: string[];
+  damage_resistances: string[];
+  damage_vulnerabilities: string[];
+  condition_immunities: APIResource[];
+  special_abilities: Entry[];
+  actions: Entry[];
+  legendary_actions: Entry[];
 }
 
 type CreatureSize =
@@ -39,4 +46,9 @@ interface APIResource {
   index: string;
   name: string;
   url: string;
+}
+
+interface Entry {
+  name: string;
+  desc: string;
 }

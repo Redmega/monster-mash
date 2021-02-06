@@ -1,5 +1,4 @@
 import { ReactNode, useMemo } from "react";
-import clsx from "clsx";
 
 import { toFraction } from "@/util/format";
 import Attribute from "./Attribute";

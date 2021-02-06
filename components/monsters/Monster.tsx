@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useMemo } from "react";
 import clsx from "clsx";
 
 import { toFraction } from "@/util/format";
@@ -7,6 +7,25 @@ import Attribute from "./Attribute";
 export default function Monster(monster: IMonster) {
   const loaded = !!monster.index;
   console.log(monster);
+
+  const { savingThrows, skills } = useMemo(() => {
+    const savingThrows = [];
+    const skills = [];
+    for (let proficiency of monster.proficiencies ?? []) {
+      const name = proficiency.proficiency.name;
+      if (name.startsWith("Skill:")) {
+        skills.push(proficiency);
+      } else if (name.startsWith("Saving Throw:")) {
+        savingThrows.push(proficiency);
+      }
+    }
+
+    return {
+      savingThrows,
+      skills,
+    };
+  }, [monster.proficiencies]);
+
   return (
     <article className="w-full rounded shadow-md p-2 bg-yellow-100">
       <header className="flex justify-between mb-2 border-b border-yellow-300 w-full shadow-sm">
@@ -19,7 +38,6 @@ export default function Monster(monster: IMonster) {
             </small>
           )}
         </div>
-
         {loaded && (
           <div className="flex flex-col justify-items-center text-right font-mono text-xs text-gray-700 font-semibold mb-1">
             <span>CR {toFraction(monster.challenge_rating)}</span>
@@ -38,38 +56,72 @@ export default function Monster(monster: IMonster) {
               <span className="font-bold">HP: </span>
               {monster.hit_points}
             </p>
-            <p className="m-1">
-              ​<span className="font-bold">Saving Throws: </span>
-              <span>TODO</span>
-            </p>
-            <p className="m-1">
-              ​<span className="font-bold">Damage Immunities: </span>
-              <span>TODO</span>
-            </p>
-            <p className="m-1">
-              ​<span className="font-bold">Damage Resistances: </span>
-              <span>TODO</span>
-            </p>
-            <p className="m-1">
-              ​<span className="font-bold">Damage Vulnerabilities: </span>
-              <span>TODO</span>
-            </p>
-            <p className="m-1">
-              ​<span className="font-bold">Condition Immunities: </span>
-              <span>TODO</span>
-            </p>
-            <p className="m-1">
-              ​<span className="font-bold">Proficiencies: </span>
-              <span>
-                {monster.proficiencies.map(({ value, proficiency: { name } }) => (
-                  <Pill>{`${name.replace(/Skill: /, " ")} ${value > 0 ? "+" : ""}${value}`}</Pill>
-                ))}
-              </span>
-            </p>
+            {savingThrows.length > 0 && (
+              <p className="m-1">
+                ​<span className="font-bold">Saving Throws: </span>
+                <span>
+                  {savingThrows.map(({ value, proficiency: { name } }) => (
+                    <Pill key={name}>{`${name.substring(14)} ${
+                      value > 0 ? "+" : ""
+                    }${value}`}</Pill>
+                  ))}
+                </span>
+              </p>
+            )}
+            {monster.damage_immunities.length > 0 && (
+              <p className="m-1">
+                ​<span className="font-bold">Damage Immunities: </span>
+                <span>
+                  {monster.damage_immunities.map((immunity) => (
+                    <Pill key={immunity}>{immunity}</Pill>
+                  ))}
+                </span>
+              </p>
+            )}
+            {monster.damage_resistances.length > 0 && (
+              <p className="m-1">
+                ​<span className="font-bold">Damage Resistances: </span>
+                <span>
+                  {monster.damage_resistances.map((resistance) => (
+                    <Pill key={resistance}>{resistance}</Pill>
+                  ))}
+                </span>
+              </p>
+            )}
+            {monster.damage_vulnerabilities.length > 0 && (
+              <p className="m-1">
+                ​<span className="font-bold">Damage Vulnerabilities: </span>
+                <span>
+                  {monster.damage_vulnerabilities.map((vulnerability) => (
+                    <Pill key={vulnerability}>{vulnerability}</Pill>
+                  ))}
+                </span>
+              </p>
+            )}
+            {monster.condition_immunities.length > 0 && (
+              <p className="m-1">
+                ​<span className="font-bold">Condition Immunities: </span>
+                <span>
+                  {monster.condition_immunities.map((immunity) => (
+                    <Pill key={immunity.index}>{immunity.name}</Pill>
+                  ))}
+                </span>
+              </p>
+            )}
+            {skills.length > 0 && (
+              <p className="m-1">
+                ​<span className="font-bold">Proficiencies: </span>
+                <span>
+                  {skills.map(({ value, proficiency: { name } }) => (
+                    <Pill key={name}>{`${name.substring(7)} ${value > 0 ? "+" : ""}${value}`}</Pill>
+                  ))}
+                </span>
+              </p>
+            )}
             <p className="m-1">
               <span className="font-bold">Senses: </span>
               {Object.entries(monster.senses || {}).map(([type, value]) => (
-                <Pill>{`${type.replace(/_/, " ")} ${value}`}</Pill>
+                <Pill key={type}>{`${type.replace(/_/, " ")} ${value}`}</Pill>
               ))}
             </p>
           </Section>
@@ -88,9 +140,36 @@ export default function Monster(monster: IMonster) {
               <Attribute title="CHA" value={monster.charisma} />
             </div>
           </Section>
-          <Section title="Abilities">{/* special_abilities */}TODO</Section>
-          <Section title="Actions">TODO</Section>
-          <Section title="Legendary Actions">TODO</Section>
+          {monster.special_abilities.length > 0 && (
+            <Section title="Abilities">
+              {monster.special_abilities.map((ability) => (
+                <section className="mb-2 mx-1">
+                  <h4 className="text-lg font-semibold mr-2 inline">{ability.name}</h4>
+                  <span className="text-gray-700">{ability.desc}</span>
+                </section>
+              ))}
+            </Section>
+          )}
+          {monster.actions.length > 0 && (
+            <Section title="Actions">
+              {monster.actions.map((ability) => (
+                <section className="mb-2 mx-1">
+                  <h4 className="text-lg font-semibold mr-2 inline">{ability.name}</h4>
+                  <span className="text-gray-700">{ability.desc}</span>
+                </section>
+              ))}
+            </Section>
+          )}
+          {monster.legendary_actions?.length > 0 && (
+            <Section title="Legendary Actions">
+              {monster.legendary_actions.map((ability) => (
+                <section className="mb-2 mx-1">
+                  <h4 className="text-lg font-semibold mr-2 inline">{ability.name}</h4>
+                  <span className="text-gray-700">{ability.desc}</span>
+                </section>
+              ))}
+            </Section>
+          )}
         </div>
       )}
       {!loaded && <p>Loading...</p>}
@@ -107,14 +186,14 @@ interface ISection {
 function Section({ className, title, children }: ISection) {
   return (
     <section className="mb-2 pb-2 border-b last:border-b-0 border-yellow-200">
-      <h3 className="text-xl font-serif m-1">{title}</h3>
+      {title && <h3 className="text-xl font-serif m-1 font-bold">{title}</h3>}
       {children}
     </section>
   );
 }
 function Pill({ children }) {
   return (
-    <span className="inline-block capitalize px-1 py-px bg-yellow-500 shadow-sm rounded m-2px">
+    <span className="inline-block capitalize px-1 py-px bg-yellow-200 shadow-sm rounded m-2px">
       {children}
     </span>
   );

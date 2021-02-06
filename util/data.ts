@@ -16,7 +16,7 @@ export async function pickTwo(monsters: APIResource[]): Promise<[IMonster, IMons
   const [one, two] =
     NODE_ENV === "development"
       ? [
-          monsters.find((m) => m.name === "Young Green Dragon").index,
+          monsters.find((m) => m.name === "Ancient Green Dragon").index,
           monsters.find((m) => m.name === "Archmage").index,
         ]
       : [

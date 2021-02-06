@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.googleapis.com/css2?family=Modern+Antiqua&family=Roboto&family=Roboto+Mono&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Modern+Antiqua:400,600,700&family=Roboto:400,600,700&family=Roboto+Mono:400,600,700&display=swap");
 
 html {
   @apply h-full w-full font-sans;

@@ -5,7 +5,7 @@ import Attribute from "./Attribute";
 
 export default function Monster(monster: IMonster) {
   const loaded = !!monster.index;
-  console.log(monster);
+  loaded && console.log(monster);
 
   const { savingThrows, skills } = useMemo(() => {
     const savingThrows = [];
@@ -139,7 +139,7 @@ export default function Monster(monster: IMonster) {
               <Attribute title="CHA" value={monster.charisma} />
             </div>
           </Section>
-          {monster.special_abilities.length > 0 && (
+          {monster.special_abilities?.length > 0 && (
             <Section title="Abilities">
               {monster.special_abilities.map((ability) => (
                 <section className="mb-2 mx-1">
@@ -149,10 +149,10 @@ export default function Monster(monster: IMonster) {
               ))}
             </Section>
           )}
-          {monster.actions.length > 0 && (
+          {monster.actions?.length > 0 && (
             <Section title="Actions">
               {monster.actions.map((ability) => (
-                <section className="mb-2 mx-1">
+                <section className="mb-2 mx-1" key={ability.name}>
                   <h4 className="text-lg font-semibold mr-2 inline">{ability.name}</h4>
                   <span className="text-gray-700">{ability.desc}</span>
                 </section>
@@ -162,7 +162,7 @@ export default function Monster(monster: IMonster) {
           {monster.legendary_actions?.length > 0 && (
             <Section title="Legendary Actions">
               {monster.legendary_actions.map((ability) => (
-                <section className="mb-2 mx-1">
+                <section className="mb-2 mx-1" key={ability.name}>
                   <h4 className="text-lg font-semibold mr-2 inline">{ability.name}</h4>
                   <span className="text-gray-700">{ability.desc}</span>
                 </section>

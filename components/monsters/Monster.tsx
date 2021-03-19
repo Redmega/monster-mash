@@ -1,11 +1,13 @@
 import { ReactNode, useMemo } from "react";
 
 import { toFraction } from "@/util/format";
+import log from "@/util/log";
+
 import Attribute from "./Attribute";
 
 export default function Monster({ monster }: { monster: Partial<IMonster> }) {
   const loaded = !!monster?.index;
-  loaded && console.log(monster);
+  loaded && log.debug("Monster: %o", monster);
 
   const { savingThrows, skills } = useMemo(() => {
     const savingThrows = [];

@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { NextPageContext } from "next";
 import { useRouter } from "next/router";
 import Head from "next/head";
@@ -8,7 +8,8 @@ import { faSync } from "@fortawesome/free-solid-svg-icons";
 import Footer from "@/components/layout/Footer";
 import Monsters from "@/components/monsters";
 
-import { fetchIndex, pickTwo } from "@/util/data";
+import { fetchIndex, fetchMonster, pickTwo } from "@/util/data";
+import log from "@/util/log";
 
 interface IHomeProps {
   monsters: IMonster[];
@@ -17,11 +18,18 @@ interface IHomeProps {
 export default function Home({ monsters, ...rest }: IHomeProps) {
   const router = useRouter();
 
-  let vs = useMemo(() => {
-    if (router.isReady) {
-      return (router.query.vs as string)?.split(",");
-    }
-    return [];
+  const [vs, setVs] = useState<IMonster[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      if (router.isReady) {
+        if (router.query.vs) {
+          setVs(await Promise.all((router.query.vs as string).split(",").map(fetchMonster)));
+        } else {
+          refresh();
+        }
+      }
+    })();
   }, [router.query.vs]);
 
   const refresh = useCallback(() => {
@@ -37,7 +45,7 @@ export default function Home({ monsters, ...rest }: IHomeProps) {
   return (
     <>
       <Head>
-        <title>5E Monster Mash</title>
+        <title>{vs.length > 0 ? `${vs[0].name} vs ${vs[1].name} | ` : ""}5E Monster Mash</title>
         <link rel="icon" type="image/svg+xml" href="/swords.svg" />
       </Head>
       <div className="w-full h-full flex flex-col">
@@ -51,7 +59,7 @@ export default function Home({ monsters, ...rest }: IHomeProps) {
               <FontAwesomeIcon icon={faSync} className="w-full h-full" />
             </button>
           </header>
-          <Monsters monsters={monsters} vs={vs} />
+          <Monsters monsters={vs} />
         </main>
         <Footer />
       </div>

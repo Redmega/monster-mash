@@ -1,16 +1,31 @@
 import { NextPageContext } from "next";
+import { useRouter } from "next/router";
 import Head from "next/head";
 
 import Footer from "@/components/layout/Footer";
 import Monsters from "@/components/monsters";
 
 import { fetchIndex } from "@/util/data";
+import { useMemo } from "react";
 
 interface IHomeProps {
   monsters: IMonster[];
 }
 
-export default function Home({ monsters }: IHomeProps) {
+export default function Home({ monsters, ...rest }: IHomeProps) {
+  const router = useRouter();
+
+  const vs = useMemo(() => {
+    if (router.isReady) {
+      return (router.query.vs as string)?.split(",");
+    }
+    return [];
+  }, [router.query.vs]);
+
+  if (!router.isReady) {
+    // @TODO: Some nice preloader
+    return null;
+  }
   return (
     <>
       <Head>
@@ -19,8 +34,8 @@ export default function Home({ monsters }: IHomeProps) {
       </Head>
       <div className="w-full h-full flex flex-col">
         <main className="flex-grow p-4">
-          <h1 className="text-4xl font-serif">It was a mash... A 5e Monster sMash!</h1>
-          <Monsters monsters={monsters} />
+          <h1 className="text-4xl font-serif">It was a mash... A 5e Monster Mash!</h1>
+          <Monsters monsters={monsters} vs={vs} />
         </main>
         <Footer />
       </div>

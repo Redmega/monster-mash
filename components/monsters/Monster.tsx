@@ -142,7 +142,7 @@ export default function Monster(monster: IMonster) {
           {monster.special_abilities?.length > 0 && (
             <Section title="Abilities">
               {monster.special_abilities.map((ability) => (
-                <section className="mb-2 mx-1">
+                <section key={ability.name} className="mb-2 mx-1">
                   <h4 className="text-lg font-semibold mr-2 inline">{ability.name}</h4>
                   <span className="text-gray-700">{ability.desc}</span>
                 </section>

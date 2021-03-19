@@ -12,20 +12,15 @@ export async function fetchIndex() {
   return results;
 }
 
-export async function pickTwo(monsters: APIResource[]): Promise<[IMonster, IMonster]> {
-  const [one, two] =
-    NODE_ENV === "development"
-      ? [
-          monsters.find((m) => m.name === "Ancient Green Dragon").index,
-          monsters.find((m) => m.name === "Archmage").index,
-        ]
-      : [
-          monsters[Math.floor(Math.random() * monsters.length)].index,
-          monsters[Math.floor(Math.random() * monsters.length)].index,
-        ];
+export async function fetchMonster(index: string): Promise<IMonster> {
+  return (await fetch(`${api}/monsters/${index}`)).json();
+}
 
-  return [
-    await (await fetch(`${api}/monsters/${one}`)).json(),
-    await (await fetch(`${api}/monsters/${two}`)).json(),
+export async function pickTwo(monsters: APIResource[]): Promise<[IMonster, IMonster]> {
+  const [one, two] = [
+    monsters[Math.floor(Math.random() * monsters.length)].index,
+    monsters[Math.floor(Math.random() * monsters.length)].index,
   ];
+
+  return Promise.all([fetchMonster(one), fetchMonster(two)]);
 }

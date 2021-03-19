@@ -1,12 +1,14 @@
+import { useCallback, useMemo } from "react";
 import { NextPageContext } from "next";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSync } from "@fortawesome/free-solid-svg-icons";
 
 import Footer from "@/components/layout/Footer";
 import Monsters from "@/components/monsters";
 
-import { fetchIndex } from "@/util/data";
-import { useMemo } from "react";
+import { fetchIndex, pickTwo } from "@/util/data";
 
 interface IHomeProps {
   monsters: IMonster[];
@@ -15,17 +17,23 @@ interface IHomeProps {
 export default function Home({ monsters, ...rest }: IHomeProps) {
   const router = useRouter();
 
-  const vs = useMemo(() => {
+  let vs = useMemo(() => {
     if (router.isReady) {
       return (router.query.vs as string)?.split(",");
     }
     return [];
   }, [router.query.vs]);
 
+  const refresh = useCallback(() => {
+    const vs = pickTwo(monsters);
+    router.push(`?vs=${vs.join(`,`)}`);
+  }, [monsters]);
+
   if (!router.isReady) {
     // @TODO: Some nice preloader
     return null;
   }
+
   return (
     <>
       <Head>
@@ -34,7 +42,15 @@ export default function Home({ monsters, ...rest }: IHomeProps) {
       </Head>
       <div className="w-full h-full flex flex-col">
         <main className="flex-grow p-4">
-          <h1 className="text-4xl font-serif">It was a mash... A 5e Monster Mash!</h1>
+          <header className="flex items-center">
+            <h1 className="text-4xl font-serif">It was a mash... A 5e Monster Mash!</h1>
+            <button
+              className="p-1 h-6 w-6 flex items-center justify-center ml-4 rounded-full hover:animate-spin hover:shadow-inner transition-shadow duration-200 ease-out"
+              onClick={refresh}
+            >
+              <FontAwesomeIcon icon={faSync} className="w-full h-full" />
+            </button>
+          </header>
           <Monsters monsters={monsters} vs={vs} />
         </main>
         <Footer />

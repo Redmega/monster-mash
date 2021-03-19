@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { fetchMonster, pickTwo } from "@/util/data";
+import { fetchMonster, fetchTwoRandomMonsters } from "@/util/data";
 import Monster from "./Monster";
 
 interface IMonstersProps {
@@ -16,15 +16,15 @@ export default function Monsters({ monsters, vs }: IMonstersProps) {
       if (vs) {
         setMonsters(await Promise.all(vs.map((index) => fetchMonster(index))));
       } else {
-        setMonsters(await pickTwo(monsters));
+        setMonsters(await fetchTwoRandomMonsters(monsters));
       }
     })();
   }, [vs]);
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-screen-lg md:mx-auto">
-      <Monster {...left} />
-      <Monster {...right} />
+      <Monster monster={left} />
+      <Monster monster={right} />
     </div>
   );
 }

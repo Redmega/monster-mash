@@ -19,6 +19,7 @@ module.exports = {
     extend: {
       textColor: ["visited"],
       borderWidth: ["last"],
+      animation: ["hover"],
     },
   },
   plugins: [],

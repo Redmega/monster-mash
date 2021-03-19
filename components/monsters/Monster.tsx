@@ -3,14 +3,14 @@ import { ReactNode, useMemo } from "react";
 import { toFraction } from "@/util/format";
 import Attribute from "./Attribute";
 
-export default function Monster(monster: IMonster) {
-  const loaded = !!monster.index;
+export default function Monster({ monster }: { monster: Partial<IMonster> }) {
+  const loaded = !!monster?.index;
   loaded && console.log(monster);
 
   const { savingThrows, skills } = useMemo(() => {
     const savingThrows = [];
     const skills = [];
-    for (let proficiency of monster.proficiencies ?? []) {
+    for (let proficiency of monster?.proficiencies ?? []) {
       const name = proficiency.proficiency.name;
       if (name.startsWith("Skill:")) {
         skills.push(proficiency);
@@ -23,7 +23,7 @@ export default function Monster(monster: IMonster) {
       savingThrows,
       skills,
     };
-  }, [monster.proficiencies]);
+  }, [monster?.proficiencies]);
 
   return (
     <article className="w-full rounded shadow-md p-2 bg-yellow-100">

@@ -16,11 +16,15 @@ export async function fetchMonster(index: string): Promise<IMonster> {
   return (await fetch(`${api}/monsters/${index}`)).json();
 }
 
-export async function pickTwo(monsters: APIResource[]): Promise<[IMonster, IMonster]> {
+export async function fetchTwoRandomMonsters(monsters: APIResource[]): Promise<IMonster[]> {
+  return Promise.all(pickTwo(monsters).map(fetchMonster));
+}
+
+export function pickTwo(monsters: APIResource[]): [string, string] {
   const [one, two] = [
     monsters[Math.floor(Math.random() * monsters.length)].index,
     monsters[Math.floor(Math.random() * monsters.length)].index,
   ];
 
-  return Promise.all([fetchMonster(one), fetchMonster(two)]);
+  return [one, two];
 }

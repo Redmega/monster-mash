@@ -1,0 +1,39 @@
+{
+  "name": "app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build && next export"
+  },
+  "dependencies": {
+    "next": "^12.1.6",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.10",
+    "@types/react": "^17.0.0",
+    "autoprefixer": "^10.4.7",
+    "chalk": "^4.1.0",
+    "clsx": "^1.1.1",
+    "husky": "^4.3.0",
+    "lint-staged": "^10.5.3",
+    "postcss": "^8.4.13",
+    "postcss-preset-env": "^6.7.0",
+    "prettier": "^2.2.1",
+    "tailwindcss": "^3.0.24",
+    "typescript": "^4.1.2"
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,css,md}": "prettier --write"
+  }
+}
